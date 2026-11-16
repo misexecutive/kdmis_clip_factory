@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nyro AI Clip Factory - Gamer Nyro Shorts Studio</title>
+  <style>
+    :root {
+      --bg-dark: #0a0d14;
+      --card-bg: #121722;
+      --card-border: #1e2638;
+      --card-hover: #192132;
+      --accent-cyan: #00e5ff;
+      --accent-purple: #9d4edd;
+      --accent-green: #00f59b;
+      --accent-red: #ff3366;
+      --accent-yellow: #ffb703;
+      --text-main: #f0f4fc;
+      --text-muted: #8899b5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    header {
+      background: #0d121c;
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .badge-channel {
+      background: rgba(157, 78, 221, 0.2);
+      border: 1px solid var(--accent-purple);
+      color: #d8b4fe;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .stats-bar {
+      display: flex;
+      gap: 20px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .stat-val {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .main-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+    /* SIDEBAR */
+    .sidebar {
+      width: 370px;
+      background: #0d121c;
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar-section {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .sidebar-section h3 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .filter-btn {
+      flex: 1 1 45%;
+      padding: 6px 4px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .filter-btn.active {
+      background: rgba(0, 229, 255, 0.15);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+    .clip-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .clip-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .clip-card:hover {
+      background: var(--card-hover);
+      border-color: #2e3a52;
+    }
+    .clip-card.active {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 229, 255, 0.05);
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.1);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .card-id-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-id {
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .format-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .format-micro {
+      background: rgba(255, 183, 3, 0.2);
+      color: var(--accent-yellow);
+      border: 1px solid var(--accent-yellow);
+    }
+    .format-full {
+      background: rgba(157, 78, 221, 0.2);
+      color: #d8b4fe;
+      border: 1px solid var(--accent-purple);
+    }
+    .score-badge {
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .score-high { background: rgba(0, 245, 155, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+    .score-med { background: rgba(0, 229, 255, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+    .card-hook {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .status-tag {
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .status-candidate { background: #262c3a; color: #a0aec0; }
+    .status-approved { background: rgba(0, 245, 155, 0.2); color: var(--accent-green); }
+    .status-rejected { background: rgba(255, 51, 102, 0.2); color: var(--accent-red); }
+
+    /* STAGE */
+    .stage {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      background: #090c12;
+    }
+    .player-pane {
+      width: 480px;
+      background: #07090e;
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+    .phone-frame {
+      width: 320px;
+      height: 568px;
+      background: #000;
+      border-radius: 24px;
+      border: 3px solid #2a354c;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+    }
+    .live-badge-preview {
+      position: absolute;
+      top: 65px;
+      background: rgba(0,0,0,0.8);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      z-index: 12;
+      display: none;
+    }
+    .live-hook-preview {
+      position: absolute;
+      top: 92px;
+      left: 14px;
+      right: 14px;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 13px;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      pointer-events: none;
+      z-index: 10;
+      line-height: 1.25;
+      display: none;
+    }
+    .safe-zone-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      display: none;
+      z-index: 15;
+    }
+    .safe-zone-overlay.visible { display: block; }
+    .safe-zone-overlay::before {
+      content: "YouTube UI Area (Comments/Like)";
+      position: absolute;
+      right: 8px;
+      bottom: 80px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.5);
+      writing-mode: vertical-rl;
+    }
+    .safe-zone-overlay::after {
+      content: "Shorts Title & Sound Track";
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.5);
+    }
+    .player-controls {
+      margin-top: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* DETAILS WORKSPACE */
+    .details-pane {
+      flex: 1;
+      padding: 24px 32px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+    .section-header {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--accent-cyan);
+    }
+
+    /* SELECTION PILLS (HOOKS & TITLES) */
+    .selection-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .selection-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: #0d121c;
+      border: 1px solid #1a2233;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .selection-pill:hover {
+      background: #141c2c;
+      border-color: #28354f;
+    }
+    .selection-pill.selected {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 229, 255, 0.12);
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.15);
+    }
+    .pill-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.08);
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+    .selection-pill.selected .pill-tag {
+      background: rgba(0, 229, 255, 0.25);
+      color: var(--accent-cyan);
+    }
+    .pill-text {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .custom-input {
+      width: 100%;
+      background: #0d121c;
+      border: 1px solid #1a2233;
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+    .custom-input:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+    }
+
+    /* SERIES CONTROLS */
+    .series-panel {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #0d121c;
+      border: 1px solid #1a2233;
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+    .series-toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .series-input {
+      background: #121722;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      width: 160px;
+    }
+
+    /* TRIM CONTROLS */
+    .trim-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .trim-input-box {
+      background: #0d121c;
+      border: 1px solid #1a2233;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+    .trim-input-box label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .trim-input-box input {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 1rem;
+      font-weight: 700;
+      width: 100%;
+    }
+    .trim-duration-badge {
+      background: rgba(0, 245, 155, 0.15);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    /* ACTION BAR */
+    .action-bar {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      padding: 8px 0;
+    }
+    .btn-approve {
+      flex: 2;
+      background: linear-gradient(135deg, #00f59b, #00b4d8);
+      color: #03141f;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s;
+    }
+    .btn-approve:hover { opacity: 0.9; }
+    .btn-reject {
+      flex: 1;
+      background: transparent;
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-reject:hover { background: rgba(255, 51, 102, 0.1); }
+
+    /* YOUTUBE SEO METADATA */
+    .seo-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .seo-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .seo-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .seo-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .btn-copy {
+      background: transparent;
+      border: none;
+      color: var(--accent-cyan);
+      font-size: 0.72rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .seo-input {
+      background: #0d121c;
+      border: 1px solid #1a2233;
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    textarea.seo-input {
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+    /* MODAL STYLES */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: #0d121c;
+      border: 1px solid var(--accent-cyan);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 720px;
+      box-shadow: 0 10px 40px rgba(0, 229, 255, 0.2);
+      padding: 20px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1a2233;
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>Nyro AI Clip Factory</h1>
+      <span class="badge-channel">Gamer Nyro Studio</span>
+    </div>
+    <div class="stats-bar">
+      <div>Recordings: <span class="stat-val" id="stat-recordings">0</span></div>
+      <div>Candidates: <span class="stat-val" id="stat-candidates">0</span></div>
+      <div>Approved: <span class="stat-val" id="stat-approved">0</span></div>
+      <div>Style: <span class="stat-val" style="color:var(--accent-cyan);">Tall 960px + Pill Hook</span></div>
+      <button onclick="freshStart()" style="background:transparent; border:1px solid var(--accent-red); color:var(--accent-red); padding:5px 14px; border-radius:6px; font-size:0.78rem; font-weight:700; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='rgba(255,51,102,0.15)'" onmouseout="this.style.background='transparent'">🗑️ Fresh Start</button>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <h3>OBS Recordings Library</h3>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <select id="recording-select" onchange="filterByRecording(this.value)" style="flex:1; background:#121722; border:1px solid #1e2638; color:#fff; padding:6px; border-radius:6px; font-size:0.8rem;">
+            <option value="">Loading recordings...</option>
+          </select>
+          <button onclick="if(selectedRecordingId) deleteRecording(selectedRecordingId); else alert('Select a recording first.');" style="background:transparent; border:1px solid var(--accent-red); color:var(--accent-red); padding:5px 8px; border-radius:6px; font-size:0.8rem; cursor:pointer; white-space:nowrap;" title="Delete selected recording">🗑️</button>
+        </div>
+        <div style="margin-top:8px;">
+          <button onclick="batchExportPrompt(event)" style="width:100%; background:linear-gradient(135deg, #9d4edd, #00b4d8); color:#fff; border:none; padding:7px 12px; border-radius:6px; font-size:0.8rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+            ⚡ Batch Export (All Top Clips)
+          </button>
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-btn active" onclick="setFilter('all', this)">All (<span id="count-all">0</span>)</button>
+          <button class="filter-btn" onclick="setFilter('micro', this)">⚡ Micro (8-14s) (<span id="count-micro">0</span>)</button>
+          <button class="filter-btn" onclick="setFilter('full', this)">🎬 Full (15s+) (<span id="count-full">0</span>)</button>
+          <button class="filter-btn" onclick="setFilter('approved', this)">✓ Approved (<span id="count-app">0</span>)</button>
+        </div>
+      </div>
+
+      <div class="clip-list" id="clips-container">
+        <!-- Rendered clip cards -->
+      </div>
+    </div>
+
+    <!-- MAIN STAGE -->
+    <div class="stage">
+      <!-- 9:16 PREVIEW PLAYER -->
+      <div class="player-pane">
+        <div class="phone-frame">
+          <video id="video-player" controls playsinline></video>
+          <div class="live-badge-preview" id="live-badge-preview">⚡ PART 1</div>
+          <div class="live-hook-preview" id="live-hook-preview"></div>
+          <div class="safe-zone-overlay" id="safe-overlay"></div>
+        </div>
+        <div class="player-controls">
+          <button class="btn-toggle" onclick="toggleSafeOverlay()">Toggle YouTube Safe Zones</button>
+          <span style="font-size:0.75rem; color:var(--text-muted);" id="video-tagline">1080x1920 (9:16)</span>
+        </div>
+      </div>
+
+      <!-- WORKSPACE & DETAILS -->
+      <div class="details-pane" id="details-pane">
+        <div style="color:var(--text-muted); text-align:center; margin-top:40px;">Select a candidate clip from the sidebar to inspect, customize hooks/titles, and approve.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AURA BLUEPRINT MODAL -->
+  <div id="blueprint-modal" class="modal-overlay" style="display:none;" onclick="if(event.target===this) closeBlueprintModal()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title" style="margin:0; font-size:1.1rem; color:var(--accent-cyan);">Editing Blueprint</h3>
+        <button onclick="closeBlueprintModal()" style="background:transparent; border:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer;">✕</button>
+      </div>
+      <div id="modal-body" style="margin-top:12px; max-height:70vh; overflow-y:auto; font-family:monospace; font-size:0.8rem; background:#07090e; padding:12px; border-radius:6px; border:1px solid #1a2233; color:#a0aec0; white-space:pre-wrap; word-break:break-word;">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allClips = [];
+    let activeFilter = 'all';
+    let currentClip = null;
+    let selectedRecordingId = null;
+
+    async function loadData() {
+      try {
+        const recRes = await fetch('/api/recordings');
+        const recordings = await recRes.json();
+        document.getElementById('stat-recordings').innerText = recordings.length;
+
+        const select = document.getElementById('recording-select');
+        select.innerHTML = `<option value="">All Recordings (${recordings.length})</option>` +
+          recordings.map(r => `<option value="${r.id}">${r.filename} (${r.duration.toFixed(0)}s)</option>`).join('');
+
+        // Auto-select latest recording
+        try {
+            const latestRes = await fetch('/api/latest_recording_id');
+            const latestData = await latestRes.json();
+            if (latestData.latest_recording_id) {
+                select.value = latestData.latest_recording_id;
+                selectedRecordingId = latestData.latest_recording_id;
+            }
+        } catch(e) {}
+
+        const clipsUrl = selectedRecordingId ? `/api/clips?recording_id=${selectedRecordingId}` : '/api/clips';
+        const clipsRes = await fetch(clipsUrl);
+        allClips = await clipsRes.json();
+
+        updateCounts();
+        renderClipList();
+
+        if (allClips.length > 0 && !currentClip) {
+          selectClip(allClips[0].id);
+        }
+      } catch (err) {
+        console.error('Error loading data:', err);
+      }
+    }
+
+    function updateCounts() {
+      document.getElementById('stat-candidates').innerText = allClips.length;
+      document.getElementById('stat-approved').innerText = allClips.filter(c => c.status === 'approved').length;
+      document.getElementById('count-all').innerText = allClips.length;
+      document.getElementById('count-micro').innerText = allClips.filter(c => c.clip_format === 'micro' || c.duration <= 14.0).length;
+      document.getElementById('count-full').innerText = allClips.filter(c => (c.clip_format === 'full' || !c.clip_format) && c.duration > 14.0).length;
+      document.getElementById('count-app').innerText = allClips.filter(c => c.status === 'approved').length;
+    }
+
+    function setFilter(filter, btn) {
+      activeFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderClipList();
+    }
+
+    function filterByRecording(recId) {
+      selectedRecordingId = recId ? parseInt(recId) : null;
+      renderClipList();
+    }
+
+    function renderClipList() {
+      const container = document.getElementById('clips-container');
+      const filtered = allClips.filter(c => {
+        if (selectedRecordingId && c.recording_id !== selectedRecordingId) return false;
+        if (activeFilter === 'all') return true;
+        if (activeFilter === 'approved') return c.status === 'approved';
+        if (activeFilter === 'micro') return c.clip_format === 'micro' || c.duration <= 14.0;
+        if (activeFilter === 'full') return (c.clip_format === 'full' || !c.clip_format) && c.duration > 14.0;
+        return c.status === activeFilter;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="color:var(--text-muted); font-size:0.8rem; text-align:center; padding:20px;">No clips in this view.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(c => {
+        const scoreClass = c.score >= 70 ? 'score-high' : 'score-med';
+        const isActive = currentClip && currentClip.id === c.id ? 'active' : '';
+        const hook = c.selected_hook || (c.suggested_hooks && c.suggested_hooks[0]) || 'Raw highlight';
+        const isMicro = c.clip_format === 'micro' || c.duration <= 14.0;
+        const formatBadge = isMicro ? `<span class="format-badge format-micro">⚡ 8-12s</span>` : `<span class="format-badge format-full">🎬 20-40s</span>`;
+
+        const categoryBadge = c.category ? `<span style="font-size:0.68rem; background:rgba(157,78,221,0.25); border:1px solid #9d4edd; color:#e9d5ff; padding:1px 6px; border-radius:4px; font-weight:600;">${c.category}</span>` : '';
+        const auraBadge = c.aura_profile ? `<span style="font-size:0.68rem; background:rgba(0,229,255,0.15); border:1px solid #00e5ff; color:#00e5ff; padding:1px 6px; border-radius:4px; font-weight:600;">${c.aura_profile}</span>` : '';
+
+        return `
+          <div class="clip-card ${isActive}" onclick="selectClip('${c.id}')">
+            <div class="card-top">
+              <div class="card-id-row">
+                <span class="card-id">${c.id}</span>
+                ${formatBadge}
+              </div>
+              <span class="score-badge ${scoreClass}">${c.score.toFixed(1)}</span>
+            </div>
+            <div style="display:flex; gap:6px; margin: 4px 0 6px 0; flex-wrap:wrap;">
+              ${categoryBadge}
+              ${auraBadge}
+            </div>
+            <div class="card-hook">"${hook}"</div>
+            <div class="card-meta">
+              <span>⏱ ${c.start_time.toFixed(1)}s - ${c.end_time.toFixed(1)}s (${c.duration.toFixed(1)}s)</span>
+              <span class="status-tag status-${c.status}">${c.status}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectClip(clipId) {
+      currentClip = allClips.find(c => c.id === clipId);
+      if (!currentClip) return;
+
+      renderClipList();
+      renderDetails();
+
+      const player = document.getElementById('video-player');
+      const liveHook = document.getElementById('live-hook-preview');
+      const liveBadge = document.getElementById('live-badge-preview');
+      const currentHook = currentClip.selected_hook || (currentClip.suggested_hooks && currentClip.suggested_hooks[0]) || '';
+      const currentBadge = currentClip.series_part ? `⚡ ${currentClip.series_part.toUpperCase()}` : '';
+
+      if (currentClip.render_path) {
+        player.src = currentClip.render_path;
+        document.getElementById('video-tagline').innerText = '9:16 Rendered Short Ready (Broadcast Quality)';
+        liveHook.style.display = 'none';
+        liveBadge.style.display = 'none';
+      } else {
+        // Raw preview with simulated overlay
+        player.src = `/storage/raw_recordings/${currentClip.filename}#t=${currentClip.start_time},${currentClip.end_time}`;
+        document.getElementById('video-tagline').innerText = `16:9 Raw Source Slice (${currentClip.duration.toFixed(1)}s)`;
+        liveHook.innerText = currentHook ? `"${currentHook}"` : '';
+        liveHook.style.display = currentHook ? 'block' : 'none';
+        if (currentBadge) {
+          liveBadge.innerText = currentBadge;
+          liveBadge.style.display = 'block';
+        } else {
+          liveBadge.style.display = 'none';
+        }
+      }
+      player.load();
+    }
+
+    function renderDetails() {
+      const c = currentClip;
+      const b = c.score_breakdown || {};
+      const hooks = c.suggested_hooks || [];
+      const selectedHook = c.selected_hook || hooks[0] || '';
+      const titles = c.title_choices || (c.title ? [c.title] : ['Viral Gameplay Highlight 🎯 #Shorts']);
+      const selectedTitle = c.title || titles[0];
+      const isMicro = c.clip_format === 'micro' || c.duration <= 14.0;
+      const seriesBadge = c.series_part ? `⚡ ${c.series_part.toUpperCase()}` : '⚡ PART 1';
+
+      const hookTags = ['ACTION / SKILL', 'SUSPENSE / CURIOSITY', 'POV / REACTION', 'EPISODIC SERIES'];
+      const titleTags = ['🎯 ACTION & SKILL', '💥 VIRAL CURIOSITY', '⚡ EPISODIC SERIES'];
+
+      const pane = document.getElementById('details-pane');
+      pane.innerHTML = `
+        <!-- HEADER -->
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <h2 style="font-size:1.35rem;">${c.id}</h2>
+              <span class="format-badge ${isMicro ? 'format-micro' : 'format-full'}">${isMicro ? '⚡ Micro-Short (6-10s)' : '🎬 Extended Short (15-20s)'}</span>
+              <span style="font-size:0.75rem; background:rgba(0,229,255,0.18); border:1px solid #00e5ff; color:#00e5ff; padding:2px 8px; border-radius:12px; font-weight:700;">${c.aura_profile || 'CINEMATIC AURA'}</span>
+              <span style="font-size:0.75rem; background:rgba(157,78,221,0.22); border:1px solid #9d4edd; color:#e9d5ff; padding:2px 8px; border-radius:12px; font-weight:700;">${c.category || 'Cinematic Gameplay'}</span>
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">
+              From <b>${c.filename}</b> | Peak at <b>${c.peak_timestamp.toFixed(1)}s</b> (${c.trigger_type}) | 
+              <button onclick="viewBlueprint('${c.id}')" style="background:transparent; border:none; color:var(--accent-cyan); text-decoration:underline; cursor:pointer; font-size:0.8rem;">View AURA Blueprint</button>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:1.8rem; font-weight:800; color:var(--accent-green);">${c.score.toFixed(1)}<span style="font-size:0.9rem; color:var(--text-muted);">/100</span></div>
+            <span class="status-tag status-${c.status}">${c.status}</span>
+          </div>
+        </div>
+
+        <!-- TIMELINE TRIMMING CONTROLS -->
+        <div class="section-card">
+          <div class="section-header">Fine-Tune Clip In/Out Timestamps</div>
+          <div class="trim-grid">
+            <div class="trim-input-box">
+              <label>START TIME (SECONDS)</label>
+              <input type="number" step="0.1" id="trim-start" value="${c.start_time.toFixed(1)}" oninput="updateTrimDuration()">
+            </div>
+            <div class="trim-input-box">
+              <label>END TIME (SECONDS)</label>
+              <input type="number" step="0.1" id="trim-end" value="${c.end_time.toFixed(1)}" oninput="updateTrimDuration()">
+            </div>
+            <div class="trim-duration-badge" id="trim-duration-badge">
+              DURATION: ${(c.end_time - c.start_time).toFixed(1)}s
+            </div>
+          </div>
+        </div>
+
+        <!-- SERIES / EPISODIC FEATURE -->
+        <div class="section-card">
+          <div class="section-header">Episodic Series Feature (Brings Viewers Back for Next Part)</div>
+          <div class="series-panel">
+            <label class="series-toggle-label">
+              <input type="checkbox" id="series-toggle" checked onchange="toggleSeriesBadge(this.checked)">
+              <span>Burn Series Badge into Short:</span>
+            </label>
+            <input type="text" id="series-badge-input" class="series-input" value="${seriesBadge}" oninput="updateBadgeText(this.value)">
+            <span style="font-size:0.75rem; color:var(--text-muted);">Creates multi-part narrative curiosity so viewers subscribe for Part 2!</span>
+          </div>
+        </div>
+
+        <!-- HOOK SELECTION (4 DIFFERENTIATED OPTIONS) -->
+        <div class="section-card">
+          <div class="section-header">Hook Text Overlay (Pick from 4 Tailored Styles)</div>
+          <div class="selection-list">
+            ${hooks.map((h, idx) => `
+              <div class="selection-pill ${selectedHook === h ? 'selected' : ''}" onclick="applyHookOption('${h.replace(/'/g, "\\'")}', this)">
+                <span class="pill-tag">${hookTags[idx] || 'HOOK #' + (idx+1)}</span>
+                <span class="pill-text">"${h}"</span>
+              </div>
+            `).join('')}
+          </div>
+          <input type="text" id="custom-hook-input" class="custom-input" placeholder="Or type a custom hook text..." value="${selectedHook}" oninput="onCustomHookType(this.value)">
+        </div>
+
+        <!-- TITLE SELECTION (3 DIFFERENTIATED CHOICES) -->
+        <div class="section-card">
+          <div class="section-header">YouTube Title Choices (3 Differentiated Angles)</div>
+          <div class="selection-list">
+            ${titles.map((t, idx) => `
+              <div class="selection-pill ${selectedTitle === t ? 'selected' : ''}" onclick="applyTitleOption('${t.replace(/'/g, "\\'")}', this)">
+                <span class="pill-tag">${titleTags[idx] || 'TITLE #' + (idx+1)}</span>
+                <span class="pill-text">${t}</span>
+              </div>
+            `).join('')}
+          </div>
+          <input type="text" id="custom-title-input" class="custom-input" placeholder="Or edit title here..." value="${selectedTitle}">
+        </div>
+
+        <!-- ACTION CONTROLS -->
+        <div class="action-bar">
+          <button class="btn-approve" id="approve-btn" onclick="approveAndRender()">
+            ⚡ Approve & Render 9:16 Short (Broadcast Style + Hook Pill)
+          </button>
+          <button class="btn-reject" onclick="rejectCurrentClip()">
+            ✕ Reject Candidate
+          </button>
+        </div>
+
+        <!-- YOUTUBE SEO METADATA -->
+        <div class="section-card">
+          <div class="section-header">YouTube Upload-Ready Description & CSV Tags</div>
+          <div class="seo-box">
+            <div class="seo-field">
+              <div class="seo-label-row">
+                <span class="seo-label">Description (Includes CTA for Next Part)</span>
+                <button class="btn-copy" onclick="copyText(document.getElementById('desc-text').value)">Copy Description</button>
+              </div>
+              <textarea id="desc-text" class="seo-input">${c.description || ''}</textarea>
+            </div>
+            <div class="seo-field">
+              <div class="seo-label-row">
+                <span class="seo-label">Differentiated CSV Tags (For YouTube Studio Tag Box)</span>
+                <button class="btn-copy" onclick="copyText(document.getElementById('tags-text').value)">Copy Tags</button>
+              </div>
+              <input type="text" id="tags-text" class="seo-input" value="${c.tags_csv || ''}">
+            </div>
+          </div>
+        </div>
+
+        <!-- REASONING -->
+        <div class="section-card">
+          <div class="section-header">Editorial Reasoning & Event Dynamics</div>
+          <div class="reasoning-text" style="font-size:0.85rem; color:#cbd5e1; line-height:1.5;">${c.reasoning || 'Gameplay moment exhibiting significant auditory/visual activity.'}</div>
+        </div>
+      `;
+    }
+
+    function applyHookOption(hookText, pillElement) {
+      document.querySelectorAll('#details-pane .selection-list:nth-of-type(1) .selection-pill').forEach(p => p.classList.remove('selected'));
+      if (pillElement) pillElement.classList.add('selected');
+      const input = document.getElementById('custom-hook-input');
+      input.value = hookText;
+      updateLiveHook(hookText);
+    }
+
+    function onCustomHookType(val) {
+      document.querySelectorAll('#details-pane .selection-list:nth-of-type(1) .selection-pill').forEach(p => p.classList.remove('selected'));
+      updateLiveHook(val);
+    }
+
+    function applyTitleOption(titleText, pillElement) {
+      document.querySelectorAll('#details-pane .selection-list:nth-of-type(2) .selection-pill').forEach(p => p.classList.remove('selected'));
+      if (pillElement) pillElement.classList.add('selected');
+      document.getElementById('custom-title-input').value = titleText;
+    }
+
+    function toggleSeriesBadge(isChecked) {
+      const badge = document.getElementById('live-badge-preview');
+      badge.style.display = isChecked ? 'block' : 'none';
+    }
+
+    function updateBadgeText(text) {
+      const badge = document.getElementById('live-badge-preview');
+      badge.innerText = text;
+      if (document.getElementById('series-toggle').checked) {
+        badge.style.display = text ? 'block' : 'none';
+      }
+    }
+
+    function updateLiveHook(text) {
+      const liveHook = document.getElementById('live-hook-preview');
+      if (currentClip && !currentClip.render_path) {
+        liveHook.innerText = text ? `"${text}"` : '';
+        liveHook.style.display = text ? 'block' : 'none';
+      }
+    }
+
+    function updateTrimDuration() {
+      const s = parseFloat(document.getElementById('trim-start').value) || 0;
+      const e = parseFloat(document.getElementById('trim-end').value) || 0;
+      const dur = Math.max(0, e - s);
+      const badge = document.getElementById('trim-duration-badge');
+      badge.innerText = `DURATION: ${dur.toFixed(1)}s`;
+      if (dur > 60.0) {
+        badge.style.color = 'var(--accent-red)';
+        badge.style.borderColor = 'var(--accent-red)';
+      } else {
+        badge.style.color = 'var(--accent-green)';
+        badge.style.borderColor = 'var(--accent-green)';
+      }
+    }
+
+    async function approveAndRender() {
+      if (!currentClip) return;
+      const btn = document.getElementById('approve-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = 'Rendering 1080x1920 Short with Broadcast Polish... ⏳';
+      btn.style.opacity = '0.7';
+      btn.disabled = true;
+
+      const hook = document.getElementById('custom-hook-input').value.trim();
+      const title = document.getElementById('custom-title-input').value.trim();
+      const hasSeries = document.getElementById('series-toggle').checked;
+      const seriesBadge = hasSeries ? document.getElementById('series-badge-input').value.trim() : null;
+      const customStart = parseFloat(document.getElementById('trim-start').value);
+      const customEnd = parseFloat(document.getElementById('trim-end').value);
+
+      try {
+        const res = await fetch(`/api/clips/${currentClip.id}/approve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            selected_hook: hook,
+            selected_title: title,
+            series_badge: seriesBadge,
+            custom_start: customStart,
+            custom_end: customEnd,
+            render_now: true
+          })
+        });
+        const result = await res.json();
+        if (res.ok) {
+          currentClip.status = 'approved';
+          currentClip.render_path = result.render_url;
+          currentClip.selected_hook = hook;
+          currentClip.title = title;
+          currentClip.series_part = seriesBadge;
+          currentClip.start_time = customStart;
+          currentClip.end_time = customEnd;
+          currentClip.duration = customEnd - customStart;
+          await loadData();
+          selectClip(currentClip.id);
+        } else {
+          alert('Render Error: ' + (result.detail || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Failed to trigger render: ' + err.message);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.style.opacity = '1';
+        btn.disabled = false;
+      }
+    }
+
+    async function rejectCurrentClip() {
+      if (!currentClip) return;
+      try {
+        await fetch(`/api/clips/${currentClip.id}/reject`, { method: 'POST' });
+        currentClip.status = 'rejected';
+        await loadData();
+      } catch (err) {
+        alert('Failed to reject: ' + err.message);
+      }
+    }
+
+    function toggleSafeOverlay() {
+      const el = document.getElementById('safe-overlay');
+      el.classList.toggle('visible');
+    }
+
+    function copyText(str) {
+      navigator.clipboard.writeText(str);
+      alert('Copied to clipboard!');
+    }
+
+    async function freshStart() {
+        if (!confirm('⚠️ This will permanently delete ALL recordings and clips from the database. Continue?')) return;
+        try {
+            await fetch('/api/reset', { method: 'POST' });
+            allClips = [];
+            currentClip = null;
+            selectedRecordingId = null;
+            await loadData();
+            document.getElementById('details-pane').innerHTML = '<div style="color:var(--text-muted); text-align:center; margin-top:40px;">Database purged. Drop a new recording in storage/raw_recordings/ and re-ingest.</div>';
+            document.getElementById('video-player').src = '';
+        } catch (err) {
+            alert('Reset failed: ' + err.message);
+        }
+    }
+
+    async function deleteRecording(recId) {
+        if (!confirm('Delete this recording and all its candidate clips?')) return;
+        try {
+            await fetch(`/api/recordings/${recId}`, { method: 'DELETE' });
+            if (selectedRecordingId === recId) {
+                selectedRecordingId = null;
+            }
+            currentClip = null;
+            await loadData();
+        } catch (err) {
+            alert('Delete failed: ' + err.message);
+        }
+    }
+
+    async function viewBlueprint(clipId) {
+      const modal = document.getElementById('blueprint-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalBody = document.getElementById('modal-body');
+      modalTitle.innerText = `Editing Blueprint: ${clipId}`;
+      modalBody.innerText = 'Loading blueprint...';
+      modal.style.display = 'flex';
+
+      try {
+        const res = await fetch(`/api/clips/${clipId}/blueprint`);
+        if (!res.ok) throw new Error('Blueprint not found');
+        const data = await res.json();
+        modalBody.innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        modalBody.innerText = 'Error fetching blueprint: ' + err.message;
+      }
+    }
+
+    function closeBlueprintModal() {
+      document.getElementById('blueprint-modal').style.display = 'none';
+    }
+
+    async function batchExportPrompt(ev) {
+      const recId = selectedRecordingId;
+      if (!recId) {
+        alert('Please select a recording from the dropdown first.');
+        return;
+      }
+      const topKStr = prompt('How many top clips would you like to batch export? (e.g. 3)', '3');
+      if (!topKStr) return;
+      const topK = parseInt(topKStr) || 3;
+
+      if (!confirm(`Trigger batch render for top ${topK} clips from recording #${recId}?\nEach clip will receive a standard output bundle (video, metadata, blueprint, report, thumbnail).`)) return;
+
+      const btn = ev ? ev.currentTarget : null;
+      const originalText = btn ? btn.innerText : '';
+      if (btn) {
+        btn.innerText = 'Batch Exporting... ⏳';
+        btn.disabled = true;
+      }
+
+      try {
+        const res = await fetch('/api/batch_export', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ recording_id: recId, top_k: topK })
+        });
+        const result = await res.json();
+        if (res.ok) {
+          alert(`Batch Export Complete!\nRendered ${result.rendered_count} clips:\n${result.output_directories.join('\n')}`);
+          await loadData();
+        } else {
+          alert('Batch Export Failed: ' + (result.detail || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Batch export error: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.innerText = originalText;
+          btn.disabled = false;
+        }
+      }
+    }
+
+    window.onload = loadData;
+  </script>
+</body>
+</html>

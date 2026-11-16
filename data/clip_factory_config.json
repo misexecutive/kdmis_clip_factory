@@ -1,0 +1,90 @@
+{
+  "channel_name": "Gamer Nyro",
+  "profile_name": "MAXIMUM_QUALITY",
+  "hardware": {
+    "prefer_gpu": true,
+    "gpu_device_id": 0,
+    "nvenc_preset": "p6",
+    "nvenc_tune": "hq",
+    "max_video_bitrate": "18M",
+    "target_video_bitrate": "14M",
+    "audio_bitrate": "256k",
+    "cpu_threads": 0
+  },
+  "scoring_weights": {
+    "hook_potential": 0.15,
+    "visual_quality": 0.15,
+    "audio_quality": 0.1,
+    "event_significance": 0.15,
+    "payoff": 0.15,
+    "emotional_impact": 0.1,
+    "replay_loop_potential": 0.1,
+    "originality": 0.05,
+    "technical_quality": 0.05
+  },
+  "safe_zones": {
+    "top_margin_px": 240,
+    "bottom_margin_px": 380,
+    "right_margin_px": 140,
+    "left_margin_px": 40
+  },
+  "master_loudness_target_lufs": -14.0,
+  "master_true_peak_db": -1.0,
+  "master_lra": 11.0,
+  "profiles": {
+    "FAST": {
+      "name": "FAST",
+      "description": "Rapid preview mode using keyframes and energy spikes only",
+      "video_sample_fps": 2.0,
+      "optical_flow_enabled": false,
+      "audio_spectral_enabled": false,
+      "speech_vad_enabled": false,
+      "refine_scene_cuts": false,
+      "candidate_micro_range": [
+        6.0,
+        10.0
+      ],
+      "candidate_extended_range": [
+        15.0,
+        20.0
+      ],
+      "min_score_threshold": 50.0
+    },
+    "BALANCED": {
+      "name": "BALANCED",
+      "description": "Standard production with motion heuristics and spectral analysis",
+      "video_sample_fps": 4.0,
+      "optical_flow_enabled": true,
+      "audio_spectral_enabled": true,
+      "speech_vad_enabled": true,
+      "refine_scene_cuts": true,
+      "candidate_micro_range": [
+        6.0,
+        10.0
+      ],
+      "candidate_extended_range": [
+        15.0,
+        20.0
+      ],
+      "min_score_threshold": 55.0
+    },
+    "MAXIMUM_QUALITY": {
+      "name": "MAXIMUM_QUALITY",
+      "description": "Comprehensive 4-pass intelligence, fine-grained optical flow, dual-tier candidate clustering",
+      "video_sample_fps": 8.0,
+      "optical_flow_enabled": true,
+      "audio_spectral_enabled": true,
+      "speech_vad_enabled": true,
+      "refine_scene_cuts": true,
+      "candidate_micro_range": [
+        6.0,
+        10.0
+      ],
+      "candidate_extended_range": [
+        15.0,
+        20.0
+      ],
+      "min_score_threshold": 60.0
+    }
+  }
+}

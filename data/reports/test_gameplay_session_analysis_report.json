@@ -1,0 +1,159 @@
+{
+  "source_filename": "test_gameplay_session.mp4",
+  "source_filepath": "C:\\Personal\\CLIP_FACTORY\\storage\\raw_recordings\\test_gameplay_session.mp4",
+  "duration_seconds": 60.0,
+  "resolution": "1920x1080",
+  "fps": 60.0,
+  "bitrate": 767292,
+  "audio_channels": 1,
+  "audio_sample_rate": 48000,
+  "scene_boundaries": [
+    0.0
+  ],
+  "visual_events": [],
+  "audio_events": [
+    {
+      "timestamp": 23.52,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2532.3,
+      "sub_bass_energy": 0.0,
+      "rms_level": 0.001,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 23.87,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2468.6,
+      "sub_bass_energy": 0.01,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 24.22,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2504.3,
+      "sub_bass_energy": 0.01,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 24.51,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2444.8,
+      "sub_bass_energy": 0.01,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 25.06,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2561.1,
+      "sub_bass_energy": 0.01,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 25.38,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2600.0,
+      "sub_bass_energy": 0.01,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 25.82,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2608.0,
+      "sub_bass_energy": 0.0,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 26.14,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2490.4,
+      "sub_bass_energy": 0.01,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 26.53,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2565.5,
+      "sub_bass_energy": 0.01,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 26.98,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2592.3,
+      "sub_bass_energy": 0.01,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    },
+    {
+      "timestamp": 27.3,
+      "event_type": "bass_explosion",
+      "intensity": 1.0,
+      "confidence": 0.92,
+      "spectral_centroid_hz": 2561.9,
+      "sub_bass_energy": 0.01,
+      "rms_level": 0.002,
+      "description": "Heavy Sub-Bass Impact / Detonation"
+    }
+  ],
+  "contextual_moments": [
+    {
+      "start_time": 21.02,
+      "end_time": 30.3,
+      "duration": 9.28,
+      "peak_timestamp": 23.52,
+      "primary_category": "Cinematic Gameplay",
+      "secondary_categories": [
+        "Environmental Details"
+      ],
+      "confidence": 0.76,
+      "visual_intensity": 0.2,
+      "audio_intensity": 1.0,
+      "fusion_score": 0.604,
+      "reasons_for_selection": [
+        "Elevated gameplay pacing and consistent audiovisual engagement."
+      ],
+      "rejection_reasons": [],
+      "is_candidate": true
+    }
+  ],
+  "average_visual_motion": 0.821,
+  "audio_dynamic_range_db": 21.9,
+  "sub_bass_peak_timestamp": 24.8,
+  "generated_at": 1794718985.6817322,
+  "processing_time_seconds": 19.14,
+  "pass_timings": {
+    "pass_a_technical_s": 0.044,
+    "pass_b_visual_s": 19.025,
+    "pass_c_audio_s": 0.069,
+    "pass_d_contextual_s": 0.001
+  },
+  "profile_used": "MAXIMUM_QUALITY"
+}
